@@ -1,11 +1,11 @@
 {
-  "name": "scroller",
+  "name": "pull-scroll",
   "description": "",
   "version": "0.0.0",
-  "homepage": "https://github.com/dominictarr/scroller",
+  "homepage": "https://github.com/dominictarr/pull-scroll",
   "repository": {
     "type": "git",
-    "url": "git://github.com/dominictarr/scroller.git"
+    "url": "git://github.com/dominictarr/pull-scroll.git"
   },
   "dependencies": {
     "hyperscript": "^1.4.7",
