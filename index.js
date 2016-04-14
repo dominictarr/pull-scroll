@@ -43,7 +43,7 @@ function overflow (el) {
 }
 
 var buffer = 100
-module.exports = function Scroller(scroller, render, top, sticky) {
+module.exports = function Scroller(scroller, render, top, sticky, cb) {
   var f = overflow(scroller)
   if(!/auto|scroll/.test(f))
     throw new Error('scroller.style.overflowY must be scroll or auto, was:' + f + '!')
@@ -71,6 +71,9 @@ module.exports = function Scroller(scroller, render, top, sticky) {
       queue.push(e)
       if(isEnd(scroller, buffer, top)) add()
       if(queue.length > 5) pause.pause()
+    }, function (err) {
+      if(err) console.error(err)
+      cb ? cb(err) : console.error(err)
     })
   )
 }
