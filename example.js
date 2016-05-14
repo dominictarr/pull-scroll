@@ -10,13 +10,22 @@ var v = o.value()
 
 var check = h('input', {type: 'checkbox'})
 var sticky = o.input(check, 'checked')
-
+var panel
 document.body.appendChild(
-  h('div', {style: {position: 'fixed', right: '20px', top: '20px'}},
-    c, '-', v, check, 
-    h('a', 'Create!', {href: '#', onclick: function () {
-      document.body.appendChild(createScroller())
-    }})
+  panel = h('div.screen', {
+    style: {
+      top: '0px', bottom: '0px',
+      position: 'absolute',
+      display: 'flex',
+      'flex-direction': 'row'
+    }
+  },
+    h('div', {style: {position: 'fixed', right: '20px', top: '20px'}},
+      c, '-', v, check, 
+      h('a', 'Create!', {href: '#', onclick: function () {
+        panel.appendChild(createScroller())
+      }})
+    )
   )
 )
 
@@ -50,7 +59,7 @@ function render (e) {
 function createScroller () {
   var scroller = SCROLLER = h('ol', {
     style: {
-      height: '600px', width: '400px',
+      'flex-bias': 0,
       overflowY: 'scroll',
       overflow: 'auto',
       display: 'inline-block'
@@ -67,8 +76,10 @@ function createScroller () {
     Scroller(scroller, render, false, false)
   )
 
-  return scroller
+  return h('div', {style: {
+    display: 'flex', 'flex-bias': 0,
+    'flex-direction': 'column'
+    }}, h('h1', 'scroller') , scroller)
 }
-
 
 
