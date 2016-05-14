@@ -16,6 +16,7 @@ function isEnd(scroller, buffer, top) {
 }
 
 function append(list, el, top, sticky) {
+  if(!el) return
   var s = list.scrollHeight
   if(top && list.firstChild)
     list.insertBefore(el, list.firstChild)
