@@ -44,7 +44,16 @@ function overflow (el) {
 }
 
 var buffer = 100
-module.exports = function Scroller(scroller, render, top, sticky, cb) {
+module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
+  //if second argument is a function,
+  //it means the scroller and content elements are the same.
+  if('function' === typeof content) {
+    cb = sticky
+    top = render
+    render = content
+    content = scroller
+  }
+
   var f = overflow(scroller)
   if(!/auto|scroll/.test(f))
     throw new Error('scroller.style.overflowY must be scroll or auto, was:' + f + '!')
@@ -56,7 +65,7 @@ module.exports = function Scroller(scroller, render, top, sticky, cb) {
 
   function add () {
     if(queue.length)
-      append(scroller, render(queue.shift()), top, sticky)
+      append(content, render(queue.shift()), top, sticky)
   }
 
   function scroll (ev) {
