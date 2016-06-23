@@ -1,8 +1,10 @@
 var pull = require('pull-stream')
 var Pause = require('pull-pause')
+var isVisible = require('is-visible').isVisible
 
 function isBottom (scroller, buffer) {
-  var topmax = scroller.scrollTopMax || (scroller.scrollHeight - scroller.getBoundingClientRect().height)
+  var rect = scroller.getBoundingClientRect()
+  var topmax = scroller.scrollTopMax || (scroller.scrollHeight - rect.height)
   return scroller.scrollTop >=
     + ((topmax) - (buffer || 0))
 }
@@ -11,7 +13,21 @@ function isTop (scroller, buffer) {
   return scroller.scrollTop <= (buffer || 0)
 }
 
+function isFilled(content) {
+  return (
+    !isVisible(content)
+    //check if the scroller is not visible.
+   // && content.getBoundingClientRect().height == 0
+    //and has children. if there are no children,
+    //it might be size zero because it hasn't started yet.
+//    &&
+    && content.children.length > 10
+    //&& !isVisible(scroller)
+  )
+}
+
 function isEnd(scroller, buffer, top) {
+  //if the element is display none, don't read anything into it.
   return (top ? isTop : isBottom)(scroller, buffer)
 }
 
@@ -69,7 +85,7 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
   }
 
   function scroll (ev) {
-    if (isEnd(scroller, buffer, top)) {
+    if (isEnd(scroller, buffer, top) || isFilled(content)) {
       pause.resume()
       add()
     }
@@ -79,7 +95,10 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
     pause,
     pull.drain(function (e) {
       queue.push(e)
-      if(isEnd(scroller, buffer, top)) add()
+
+      if(!isVisible(content)) { if(content.children.length < 10) add() }
+      else if(isEnd(scroller, buffer, top)) add()
+
       if(queue.length > 5) pause.pause()
     }, function (err) {
       if(err) console.error(err)
@@ -87,6 +106,16 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
     })
   )
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
