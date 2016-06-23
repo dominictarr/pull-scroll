@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "hyperscript": "^1.4.7",
+    "is-visible": "^2.0.1",
     "observable": "^2.1.4",
     "pull-pause": "0.0.0",
     "pull-stream": "^3.0.1",
