@@ -3,7 +3,7 @@ var o = require('observable')
 var pull = require('pull-stream')
 var Pause = require('pull-pause')
 
-var Scroller = require('./')
+var Scroller = require('../')
 
 var c = o.value()
 var v = o.value()
