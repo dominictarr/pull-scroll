@@ -45,10 +45,6 @@ function append(list, el, top, sticky) {
   if(top !== sticky) {
     var st = list.scrollTop, d = (list.scrollHeight - s) + 1
     list.scrollTop = list.scrollTop + d
-//    list.scrollTo(
-//      list.scrollLeft,
-//      list.scrollTop + d
-//    )
   }
 }
 
@@ -91,11 +87,18 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
     }
   }
 
+  pause.pause()
+
+  //wait until the scroller has been added to the document
+  setImmediate(function next () {
+    if(scroller.parentElement) pause.resume()
+    else                       setTimeout(next, 100)
+  })
+
   return pull(
     pause,
     pull.drain(function (e) {
       queue.push(e)
-
       if(!isVisible(content)) { if(content.children.length < 10) add() }
       else if(isEnd(scroller, buffer, top)) add()
 
@@ -106,16 +109,5 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
     })
   )
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
