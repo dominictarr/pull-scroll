@@ -49,6 +49,33 @@ var scroller = h('div', {
 document.body.appendChild(scroller)
 ```
 
+you can have attach two Scrollers to an element, one for scrolling up
+and one for scrolling down. (thus, a two way infinite scroller)
+
+see [example here](https://github.com/dominictarr/patchbay/blob/master/modules/public.js#L24-L32)
+
+## api
+
+### Scroller(scrollable, container, render, isPrepend, isSticky) => Sink
+
+Create a pull-stream sink where the back pressure is controlled by the scrolling of the element.
+`scrollable` needs to be an element which can scroll, and `container`
+is an optional child (otherwise elements will be added directly to `scrollable`)
+
+`render` is a function that takes stream items and returns an html element.
+
+If `isPrepend` is true, elements will be added before the first child of container,
+if it is false, they will be appended.
+
+If `isSticky` is true, `scrollable` will be scrolled into position after adding an element.
+this will make more elements come automatically, untill you scroll away.
+If `isSticky` is false, new elements will extend the container, but not be scrolled into positon,
+this means the scroll will only be adjusted as the user scrolls.
+
+If the user is scrolling to read old data (i.e. scrolling down on twitter, or up in the terminal)
+then use `isSticky=false`. If the user is scrolled to the end to get new data,
+(i.e. scrolling to the top on twitter, or the bottom in the terminal)
+then use `isSticky=true`.
 
 ## License
 
