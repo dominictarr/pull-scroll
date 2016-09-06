@@ -2,6 +2,8 @@ var pull = require('pull-stream')
 var Pause = require('pull-pause')
 var isVisible = require('is-visible').isVisible
 
+var next = 'undefined' === typeof setImmediate ? setTimeout : setImmediate
+
 function isBottom (scroller, buffer) {
   var rect = scroller.getBoundingClientRect()
   var topmax = scroller.scrollTopMax || (scroller.scrollHeight - rect.height)
@@ -90,7 +92,7 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
   pause.pause()
 
   //wait until the scroller has been added to the document
-  setImmediate(function next () {
+  next(function next () {
     if(scroller.parentElement) pause.resume()
     else                       setTimeout(next, 100)
   })
@@ -109,5 +111,3 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
     })
   )
 }
-
-
