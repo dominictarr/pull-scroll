@@ -33,9 +33,9 @@ function isEnd(scroller, buffer, top) {
   return (top ? isTop : isBottom)(scroller, buffer)
 }
 
-function append(list, el, top, sticky) {
+function append(scroller, list, el, top, sticky) {
   if(!el) return
-  var s = list.scrollHeight
+  var s = scroller.scrollHeight
   if(top && list.firstChild)
     list.insertBefore(el, list.firstChild)
   else
@@ -45,8 +45,8 @@ function append(list, el, top, sticky) {
   //if it added to the top (in non-sticky mode)
   //or added it to the bottom (in sticky mode)
   if(top !== sticky) {
-    var st = list.scrollTop, d = (list.scrollHeight - s) + 1
-    list.scrollTop = list.scrollTop + d
+    var st = list.scrollTop, d = (scroller.scrollHeight - s) + 1
+    scroller.scrollTop = scroller.scrollTop + d
   }
 }
 
@@ -68,6 +68,8 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
     content = scroller
   }
 
+  if(!cb) cb = function (err) { if(err) throw err }
+
   var f = overflow(scroller)
   if(!/auto|scroll/.test(f))
     throw new Error('scroller.style.overflowY must be scroll or auto, was:' + f + '!')
@@ -79,7 +81,7 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
 
   function add () {
     if(queue.length)
-      append(content, render(queue.shift()), top, sticky)
+      append(scroller, content, render(queue.shift()), top, sticky)
   }
 
   function scroll (ev) {
@@ -97,11 +99,15 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
     else                       setTimeout(next, 100)
   })
 
-  return pull(
+  var stream = pull(
     pause,
     pull.drain(function (e) {
       queue.push(e)
-      if(!isVisible(content)) { if(content.children.length < 10) add() }
+      //we don't know the scroll bar positions if it's display none
+      //so we have to wait until it becomes visible again.
+      if(!isVisible(content)) {
+        if(content.children.length < 10) add()
+      }
       else if(isEnd(scroller, buffer, top)) add()
 
       if(queue.length > 5) pause.pause()
@@ -110,4 +116,11 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
       cb ? cb(err) : console.error(err)
     })
   )
+
+  stream.visible = add
+
+  return stream
+
 }
+
+
