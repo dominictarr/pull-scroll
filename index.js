@@ -1,8 +1,13 @@
 var pull = require('pull-stream')
 var Pause = require('pull-pause')
-var isVisible = require('is-visible').isVisible
+//var isVisible = require('is-visible').isVisible
 
 var next = 'undefined' === typeof setImmediate ? setTimeout : setImmediate
+
+function isVisible (el) {
+  var style = getComputedStyle(el)
+  return style.display === 'none' || style.visibility === 'hidden'
+}
 
 function isBottom (scroller, buffer) {
   var rect = scroller.getBoundingClientRect()
@@ -57,7 +62,7 @@ function overflow (el) {
   })()
 }
 
-var buffer = 100
+var buffer = Math.max(window.innerHeight * 2, 1000)
 module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
   //if second argument is a function,
   //it means the scroller and content elements are the same.
@@ -80,8 +85,9 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
   //`element` is at the same place on screen afterwards.
 
   function add () {
-    if(queue.length)
+    if(queue.length) {
       append(scroller, content, render(queue.shift()), top, sticky)
+    }
   }
 
   function scroll (ev) {
@@ -122,5 +128,8 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
   return stream
 
 }
+
+
+
 
 
