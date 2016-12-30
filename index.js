@@ -9,6 +9,13 @@ function isVisible (el) {
   return style.display === 'none' || style.visibility === 'hidden'
 }
 
+//test wether element has an active scroll bar.
+//(element needs to be visible for this to work)
+
+function isScroll (el) {
+  return el.scrollHeight != el.clientHeight
+}
+
 function isBottom (scroller, buffer) {
   var rect = scroller.getBoundingClientRect()
   var topmax = scroller.scrollTopMax || (scroller.scrollHeight - rect.height)
@@ -62,7 +69,7 @@ function overflow (el) {
   })()
 }
 
-var buffer = Math.max(window.innerHeight * 2, 1000)
+var buffer = Math.max(window.innerHeight * 2, 1000)/4
 module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
   //if second argument is a function,
   //it means the scroller and content elements are the same.
@@ -86,7 +93,9 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
 
   function add () {
     if(queue.length) {
-      append(scroller, content, render(queue.shift()), top, sticky)
+      var m = queue.shift()
+      var r = render(m)
+      append(scroller, content, r, top, sticky)
     }
   }
 
@@ -112,7 +121,7 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
       //we don't know the scroll bar positions if it's display none
       //so we have to wait until it becomes visible again.
       if(!isVisible(content)) {
-        if(content.children.length < 10) add()
+        if(content.children.length < 10 || !isScroll(scroller)) add()
       }
       else if(isEnd(scroller, buffer, top)) add()
 
@@ -128,6 +137,9 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
   return stream
 
 }
+
+
+
 
 
 
