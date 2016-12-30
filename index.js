@@ -58,7 +58,7 @@ function append(scroller, list, el, top, sticky) {
   //or added it to the bottom (in sticky mode)
   if(top !== sticky) {
     var st = list.scrollTop, d = (scroller.scrollHeight - s) + 1
-    scroller.scrollTop = scroller.scrollTop + (d + sdiff )
+    scroller.scrollTop = scroller.scrollTop + d
   }
 }
 
