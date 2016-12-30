@@ -1,8 +1,8 @@
 var pull = require('pull-stream')
 var Pause = require('pull-pause')
-//var isVisible = require('is-visible').isVisible
 
 var next = 'undefined' === typeof setImmediate ? setTimeout : setImmediate
+var buffer = Math.max(window.innerHeight * 2, 1000)
 
 function isVisible (el) {
   var style = getComputedStyle(el)
@@ -58,18 +58,18 @@ function append(scroller, list, el, top, sticky) {
   //or added it to the bottom (in sticky mode)
   if(top !== sticky) {
     var st = list.scrollTop, d = (scroller.scrollHeight - s) + 1
-    scroller.scrollTop = scroller.scrollTop + d
+    scroller.scrollTop = scroller.scrollTop + (d + sdiff )
   }
 }
 
 function overflow (el) {
+
   return el.style.overflowY || el.style.overflow || (function () {
     var style = getComputedStyle(el)
     return style.overflowY || el.style.overflow
   })()
 }
 
-var buffer = Math.max(window.innerHeight * 2, 1000)/4
 module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
   //if second argument is a function,
   //it means the scroller and content elements are the same.
@@ -100,7 +100,7 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
   }
 
   function scroll (ev) {
-    if (isEnd(scroller, buffer, top) || isFilled(content)) {
+    if(isEnd(scroller, buffer, top) || !isFilled(content)) {
       pause.resume()
       add()
     }
@@ -121,8 +121,9 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
       //we don't know the scroll bar positions if it's display none
       //so we have to wait until it becomes visible again.
       if(!isVisible(content)) {
-        if(content.children.length < 10 || !isScroll(scroller)) add()
+        if(content.children.length < 10) add()
       }
+      else if(!isScroll(scroller)) add()
       else if(isEnd(scroller, buffer, top)) add()
 
       if(queue.length > 5) pause.pause()
@@ -133,15 +134,6 @@ module.exports = function Scroller(scroller, content, render, top, sticky, cb) {
   )
 
   stream.visible = add
-
   return stream
-
 }
-
-
-
-
-
-
-
 
