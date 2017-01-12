@@ -56,7 +56,7 @@ see [example here](https://github.com/dominictarr/patchbay/blob/master/modules/p
 
 ## api
 
-### Scroller(scrollable, container, render, isPrepend, isSticky) => Sink
+### Scroller(scrollable, container, render, isPrepend, isSticky, cb) => Sink
 
 Create a pull-stream sink where the back pressure is controlled by the scrolling of the element.
 `scrollable` needs to be an element which can scroll, and `container`
@@ -76,6 +76,12 @@ If the user is scrolling to read old data (i.e. scrolling down on twitter, or up
 then use `isSticky=false`. If the user is scrolled to the end to get new data,
 (i.e. scrolling to the top on twitter, or the bottom in the terminal)
 then use `isSticky=true`.
+
+`cb` is an optional callback used only for error handling.
+This defaults to
+```js
+function (err) { if(err) console.error(err) }
+```
 
 ## License
 
