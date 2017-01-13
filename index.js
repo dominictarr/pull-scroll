@@ -8,8 +8,7 @@ var u = require('./utils'),
   assertScrollable = u.assertScrollable,
   isEnd = u.isEnd,
   isFilled = u.isFilled,
-  isVisible = u.isVisible,
-  isScroll = u.isScroll
+  isVisible = u.isVisible
 
 module.exports = Scroller
 
@@ -43,10 +42,8 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
   }
 
   function scroll (ev) {
-    if(isEnd(scroller, buffer, isPrepend) || !isFilled(content)) {
+    if(isEnd(scroller, buffer, isPrepend) || !isFilled(content))
       pause.resume()
-      add()
-    }
   }
 
   pause.pause()
@@ -61,14 +58,17 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
     pause,
     pull.drain(function (e) {
       queue.push(e)
-      if(queue.length > 5) pause.pause()
 
       if(scroller.scrollHeight < window.innerHeight)
         add()
 
-      if (!isVisible(content)) return
-      if(!isScroll(scroller) || isEnd(scroller, buffer, isPrepend))
-        add()
+      if (isVisible(content)) {
+        if (isEnd(scroller, buffer, isPrepend)) 
+          add()
+      }
+
+      if(queue.length > 5)
+        pause.pause()
 
     }, function (err) {
       if(err) console.error(err)

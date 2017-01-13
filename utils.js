@@ -6,7 +6,7 @@ function assertScrollable(scroller) {
 }
 
 function isEnd(scroller, buffer, isPrepend) {
-  //if the element is display none, don't read anything into it.
+  //if the element is hidden, don't read anything into it.
   return (isPrepend ? isTop : isBottom)(scroller, buffer)
 }
 
@@ -22,25 +22,16 @@ function isFilled(content) {
   )
 }
 
-function isVisible (el) {
+function isVisible(el) {
   var style = getComputedStyle(el)
   return style.display !== 'none' && style.visibility !== 'hidden'
 }
-
-//test wether element has an active scroll bar.
-//(element needs to be visible for this to work)
-
-function isScroll (el) {
-  return el.scrollHeight != el.clientHeight
-}
-
 
 module.exports = {
   assertScrollable: assertScrollable,
   isEnd: isEnd,
   isFilled: isFilled,
-  isVisible: isVisible,
-  isScroll: isScroll
+  isVisible: isVisible
 }
 
 
