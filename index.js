@@ -61,15 +61,15 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
     pause,
     pull.drain(function (e) {
       queue.push(e)
-      //we don't know the scroll bar positions if it's display none
-      //so we have to wait until it becomes visible again.
-      if(!isVisible(content)) {
-        if(content.children.length < 10) add()
-      }
-      else if(!isScroll(scroller)) add()
-      else if(isEnd(scroller, buffer, isPrepend)) add()
-
       if(queue.length > 5) pause.pause()
+
+      if(scroller.scrollHeight < window.innerHeight)
+        add()
+
+      if (!isVisible(content)) return
+      if(!isScroll(scroller) || isEnd(scroller, buffer, isPrepend))
+        add()
+
     }, function (err) {
       if(err) console.error(err)
       cb ? cb(err) : console.error(err)
