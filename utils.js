@@ -59,7 +59,6 @@ function isTop (scroller, buffer) {
 
 function isBottom (scroller, buffer) {
   var rect = scroller.getBoundingClientRect()
-  console.log('getBoundingClientRect', rect)
   var topmax = scroller.scrollTopMax || (scroller.scrollHeight - rect.height)
   return scroller.scrollTop >=
     + ((topmax) - (buffer || 0))
