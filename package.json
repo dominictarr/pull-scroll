@@ -1,20 +1,20 @@
 {
   "name": "pull-scroll",
   "description": "",
-  "version": "0.3.3",
+  "version": "1.0.1",
   "homepage": "https://github.com/dominictarr/pull-scroll",
   "repository": {
     "type": "git",
     "url": "git://github.com/dominictarr/pull-scroll.git"
   },
   "dependencies": {
-    "hyperscript": "^1.4.7",
-    "observable": "^2.1.4",
     "pull-pause": "0.0.0",
-    "pull-stream": "^3.0.1",
-    "request-animation-loop": "^0.1.0"
+    "pull-stream": "^3.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "hyperscript": "^2.0.2",
+    "observable": "^2.1.4"
+  },
   "scripts": {
     "test": "set -e; for t in test/*.js; do node $t; done"
   },
