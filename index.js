@@ -63,7 +63,6 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
   var stream = pull(
     pause,
     pull.drain(function (e) {
-      console.log('enqueue', e)
       queue.push(e)
       obv.set(queue.length)
 
@@ -106,4 +105,5 @@ function append(scroller, list, el, isPrepend, isSticky) {
     scroller.scrollTop = scroller.scrollTop + d
   }
 }
+
 
