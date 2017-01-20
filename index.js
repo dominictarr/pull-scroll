@@ -1,5 +1,6 @@
 var pull = require('pull-stream')
 var Pause = require('pull-pause')
+var Obv = require('obv')
 
 var next = 'undefined' === typeof setImmediate ? setTimeout : setImmediate
 var buffer = Math.max(window.innerHeight * 2, 1000)
@@ -14,6 +15,8 @@ module.exports = Scroller
 
 function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
   assertScrollable(scroller)
+
+  var obv = Obv()
 
   //if second argument is a function,
   //it means the scroller and content elements are the same.
@@ -38,12 +41,15 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
       var m = queue.shift()
       var r = render(m)
       append(scroller, content, r, isPrepend, isSticky)
+      obv.set(queue.length)
     }
   }
 
   function scroll (ev) {
-    if(isEnd(scroller, buffer, isPrepend) || !isFilled(content))
+    if(isEnd(scroller, buffer, isPrepend) || !isFilled(content)) {
       pause.resume()
+      add()
+    }
   }
 
   pause.pause()
@@ -57,13 +63,15 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
   var stream = pull(
     pause,
     pull.drain(function (e) {
+      console.log('enqueue', e)
       queue.push(e)
+      obv.set(queue.length)
 
       if(scroller.scrollHeight < window.innerHeight)
         add()
 
       if (isVisible(content)) {
-        if (isEnd(scroller, buffer, isPrepend)) 
+        if (isEnd(scroller, buffer, isPrepend))
           add()
       }
 
@@ -77,6 +85,7 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
   )
 
   stream.visible = add
+  stream.observ = obv
   return stream
 }
 
