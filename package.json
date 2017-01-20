@@ -8,6 +8,7 @@
     "url": "git://github.com/dominictarr/pull-scroll.git"
   },
   "dependencies": {
+    "obv": "0.0.1",
     "pull-pause": "0.0.0",
     "pull-stream": "^3.0.1"
   },
