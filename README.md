@@ -83,6 +83,17 @@ This defaults to
 function (err) { if(err) console.error(err) }
 ```
 
+### ScrollSink.visible ()
+
+call this function when the scroller becomes visible,
+and any new items will be added.
+
+### ScrollSink.observ => observable
+
+An observable of the queue size of this scroller.
+this is useful to show how many items can be displayed, but are not.
+which is useful for showing activity indicators and similar.
+
 ## License
 
 MIT
