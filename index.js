@@ -48,7 +48,6 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
   function scroll (ev) {
     if(isEnd(scroller, buffer, isPrepend) || !isFilled(content)) {
       pause.resume()
-      add()
     }
   }
 
@@ -63,7 +62,6 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
   var stream = pull(
     pause,
     pull.drain(function (e) {
-      console.log('enqueue', e)
       queue.push(e)
       obv.set(queue.length)
 
