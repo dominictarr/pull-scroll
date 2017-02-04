@@ -24,7 +24,7 @@ function isFilled(content) {
 
 function isVisible(el) {
   var style = getComputedStyle(el)
-  return style.display !== 'none' && style.visibility !== 'hidden'
+  return style.visibility !== 'hidden'
 }
 
 module.exports = {
