@@ -17,7 +17,7 @@ function isFilled(content) {
     // && content.getBoundingClientRect().height == 0
     //and has children. if there are no children,
     //it might be size zero because it hasn't started yet.
-    && content.children.length > 10
+    || content.children.length > 10
     //&& !isVisible(scroller)
   )
 }
@@ -54,4 +54,3 @@ function isBottom (scroller, buffer) {
   return scroller.scrollTop >=
     + ((topmax) - (buffer || 0))
 }
-
