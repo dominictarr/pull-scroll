@@ -47,9 +47,6 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
 
   function scroll (ev) {
     if(isEnd(scroller, buffer, isPrepend) || !isFilled(content)) {
-      for (var i = 0; i < 5; i++) {
-        add()
-      }
       pause.resume()
     }
   }
@@ -107,3 +104,4 @@ function append(scroller, list, el, isPrepend, isSticky) {
     scroller.scrollTop = scroller.scrollTop + d
   }
 }
+
