@@ -46,7 +46,6 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
   }
 
   function scroll (ev) {
-    if(_scrollTop == undefin
     if(isEnd(scroller, buffer, isPrepend) || !isFilled(content)) {
       pause.resume()
     }
@@ -115,8 +114,6 @@ function append(scroller, list, el, isPrepend, isSticky) {
     }
   }
 }
-
-
 
 
 
