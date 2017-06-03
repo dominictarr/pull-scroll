@@ -13,9 +13,9 @@ var u = require('./utils'),
 
 module.exports = Scroller
 
+
 function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
   assertScrollable(scroller)
-
   var obv = Obv()
 
   //if second argument is a function,
@@ -46,6 +46,7 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
   }
 
   function scroll (ev) {
+    if(_scrollTop == undefin
     if(isEnd(scroller, buffer, isPrepend) || !isFilled(content)) {
       pause.resume()
     }
@@ -91,6 +92,8 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
 function append(scroller, list, el, isPrepend, isSticky) {
   if(!el) return
   var s = scroller.scrollHeight
+  var st = scroller.scrollTop
+  console.log('isPrepend?', !!(isPrepend && list.firstChild))
   if(isPrepend && list.firstChild)
     list.insertBefore(el, list.firstChild)
   else
@@ -100,8 +103,24 @@ function append(scroller, list, el, isPrepend, isSticky) {
   //if it added to the top (in non-sticky mode)
   //or added it to the bottom (in sticky mode)
   if(isPrepend !== isSticky) {
-    var d = (scroller.scrollHeight - s) + 1
-    scroller.scrollTop = scroller.scrollTop + d
+    var d = (scroller.scrollHeight - s)
+    var before = scroller.scrollTop
+    //check whether the browser has moved the scrollTop for us.
+    //if you add an element that is not scrolled into view
+    //it no longer bumps the view down! but this check is still needed
+    //for firefox.
+    //this seems to be the behavior in recent chrome (also electron)
+    if(st === scroller.scrollTop) {
+      scroller.scrollTop = scroller.scrollTop + d
+    }
   }
 }
+
+
+
+
+
+
+
+
 
