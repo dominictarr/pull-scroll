@@ -92,7 +92,6 @@ function append(scroller, list, el, isPrepend, isSticky) {
   if(!el) return
   var s = scroller.scrollHeight
   var st = scroller.scrollTop
-  console.log('isPrepend?', !!(isPrepend && list.firstChild))
   if(isPrepend && list.firstChild)
     list.insertBefore(el, list.firstChild)
   else
