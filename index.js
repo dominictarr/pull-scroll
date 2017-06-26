@@ -47,6 +47,7 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
 
   function scroll (ev) {
     if(isEnd(scroller, buffer, isPrepend) || !isFilled(content)) {
+      add()
       pause.resume()
     }
   }
