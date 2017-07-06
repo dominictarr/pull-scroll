@@ -66,12 +66,14 @@ function Scroller(scroller, content, render, isPrepend, isSticky, cb) {
       queue.push(e)
       obv.set(queue.length)
 
-      if(scroller.scrollHeight < window.innerHeight)
-        add()
-
       if (isVisible(content)) {
         if (isEnd(scroller, buffer, isPrepend))
           add()
+      }
+      else {
+        if(scroller.scrollHeight < window.innerHeight && content.children.length < 10) {
+          add()
+        }
       }
 
       if(queue.length > 5)
@@ -114,7 +116,6 @@ function append(scroller, list, el, isPrepend, isSticky) {
     }
   }
 }
-
 
 
 

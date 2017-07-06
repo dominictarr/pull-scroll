@@ -22,9 +22,12 @@ function isFilled(content) {
   )
 }
 
-function isVisible(el) {
+function isVisible (el) {
+  if(!el) return false
+  if(el === document.body) return true
   var style = getComputedStyle(el)
-  return style.visibility !== 'hidden'
+  if(style.visibility === 'hidden' || style.display === 'none') return false
+  return isVisible(el.parentElement)
 }
 
 module.exports = {
@@ -54,3 +57,6 @@ function isBottom (scroller, buffer) {
   return scroller.scrollTop >=
     + ((topmax) - (buffer || 0))
 }
+
+
+
